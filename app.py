@@ -8,16 +8,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-rating_stars = [{'level':1,
-                 'rate': False},
-                {'level':2,
-                  'rate': False},
-                {'level':3,
-                  'rate': False},
-                {'level':4,
-                  'rate': False},
-                {'level':5,
-                  'rate': False},]
 
 class Feedback(db.Model):
     rating = db.Column(db.Integer, primary_key=True)
@@ -32,7 +22,7 @@ class Feedback(db.Model):
 @app.route('/')
 def main():
     feedbacks = Feedback.query.all()
-    return render_template('index.html', stars = rating_stars)
+    return render_template('index.html', feedback_list=feedbacks)
 
 
 
@@ -45,7 +35,7 @@ def main():
    
 
 @app.route('/send', methods=['POST'])
-def add_product():
+def add_feedback():
     data = request.json
     feedback = Feedback(**data)
     db.session.add(feedback)
